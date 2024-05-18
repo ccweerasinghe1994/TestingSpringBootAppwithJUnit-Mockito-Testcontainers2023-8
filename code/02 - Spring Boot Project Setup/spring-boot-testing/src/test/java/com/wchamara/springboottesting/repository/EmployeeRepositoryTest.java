@@ -1,20 +1,3 @@
-# 03 - Spring Boot - Unit Testing Repository Layer
-
-## 001 Repository layer Unit testing overview
-
-![alt text](image.png)
-![alt text](image-1.png)
-![alt text](image-2.png)
-
-## 002 Spring Boot @DataJpaTest annotation
-
-![alt text](image-3.png)
-![alt text](image-4.png)
-![alt text](image-5.png)
-
-## 003 Unit test for save employee operation
-
-```java
 package com.wchamara.springboottesting.repository;
 
 import com.wchamara.springboottesting.model.Employee;
@@ -23,11 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * This is a test class for EmployeeRepository.
  * It uses Spring Boot's @DataJpaTest for configuration.
+ *
  * @DataJpaTest provides some standard setup needed for testing the persistence layer:
  * - configuring H2, an in-memory database
  * - setting Hibernate, Spring Data, and the DataSource
@@ -47,10 +34,10 @@ class EmployeeRepositoryTest {
      * - given: An Employee object is created with some initial data.
      * - when: The save method of the EmployeeRepository is called with the created Employee object.
      * - then: Assertions are made to ensure that the saved Employee object is not null,
-     *         its id is greater than 0 (indicating successful save operation),
-     *         and the first name, last name, and email are as expected.
+     * its id is greater than 0 (indicating successful save operation),
+     * and the first name, last name, and email are as expected.
      */
-    @DisplayName("JUnit test for Save Employee operation")
+    @DisplayName("JUnit5 test for Save Employee operation")
     @Test
     void givenEmployeeObject_whenSave_ThenReturnSavedEmployee() {
         // given
@@ -67,12 +54,7 @@ class EmployeeRepositoryTest {
         assertThat(savedEmployee.getLastName()).isEqualTo(employee.getLastName());
         assertThat(savedEmployee.getEmail()).isEqualTo(employee.getEmail());
     }
-}
-```
 
-## 004 Unit test for get all employees operation
-
-```java
     /**
      * This test case is for the Find All Employees operation.
      * It uses JUnit's @Test annotation to indicate that this is a test method.
@@ -105,22 +87,4 @@ class EmployeeRepositoryTest {
         assertThat(employees).contains(employee1, employee2);
 
     }
-```
-
-## 005 Unit test for get employee by id operation
-
-## 006 Unit test for get employee by email operation (Spring Data JPA query method)
-
-## 007 Unit test for update employee operation
-
-## 008 Unit test for delete employee operation
-
-## 009 Unit test Spring Data JPA custom query method using JPQL with index parameters
-
-## 010 Unit test Spring Data JPA custom query method using JPQL with named parameters
-
-## 011 Unit test Spring Data JPA custom native query with index parameters
-
-## 012 Unit test Spring Data JPA custom Native query with Named parameters
-
-## 013 Refactoring JUnit tests to use @BeforeEach annotation
+}
