@@ -8,6 +8,10 @@
 
 ## 002 Spring Boot @DataJpaTest annotation
 
+![alt text](image-3.png)
+![alt text](image-4.png)
+![alt text](image-5.png)
+
 ## 003 Unit test for save employee operation
 
 ## 004 Unit test for get all employees operation
