@@ -39,11 +39,33 @@ Complete this course and share the Udemy certificate of this course on Linkedin 
 ## 003 What is Unit testing and Integration testing
 
 ![alt text](image-4.png)
+![alt text](image-5.png)
 
 ## 004 Best practices for Unit testing in Java
+
+![alt text](image-6.png)
+![alt text](image-7.png)
+![alt text](image-8.png)
+![alt text](image-9.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
 
 ## 005 Download Source Code
 
 ## 006 Download All the Important Lecture Notes in PDF
+
+### AssertJ Overview
+
+![alt text](image-12.png)
+![alt text](image-13.png)
+![alt text](image-14.png)
+
+![alt text](image-15.png)
+
+### JUnit Test for Spring Data JPA
+
+![alt text](image-16.png)
+![alt text](image-17.png)
+![alt text](image-18.png)
 
 ## 007 This Course Migrated to Spring Boot 3
