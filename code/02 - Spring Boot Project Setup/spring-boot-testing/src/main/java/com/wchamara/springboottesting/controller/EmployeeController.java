@@ -5,6 +5,8 @@ import com.wchamara.springboottesting.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
@@ -20,5 +22,10 @@ public class EmployeeController {
     public Employee createEmployee(@RequestBody Employee employee) {
 
         return employeeService.saveEmployee(employee);
+    }
+
+    @GetMapping
+    public List<Employee> getAllEmployees() {
+        return employeeService.getAllEmployees();
     }
 }

@@ -3,6 +3,7 @@ package com.wchamara.springboottesting.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wchamara.springboottesting.model.Employee;
 import com.wchamara.springboottesting.service.EmployeeService;
+import com.wchamara.springboottesting.util.FileUtil;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
+import java.util.List;
+
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 /**
@@ -83,6 +87,37 @@ class EmployeeControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(employee.getEmail()))).andDo(
                         MockMvcResultHandlers.print()
                 );
+    }
+
+    @Test
+    @DisplayName("get all Employees")
+    void givenEmployees_whenGetAllEmployees_thenReturnJsonArray() throws Exception {
+        // given
+        when(employeeService.getAllEmployees()).thenReturn(List.of(employee));
+
+        // when
+        ResultActions response = mockMvc.perform(
+                get("/api/v1/employees")
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName", CoreMatchers.is(employee.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].lastName", CoreMatchers.is(employee.getLastName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].email", CoreMatchers.is(employee.getEmail()))).andDo(
+                        MockMvcResultHandlers.print()
+                );
+    }
+
+    @Test
+    @DisplayName("test")
+    void givenEmployee() throws Exception {
+        String fileName = "sample-data/user.json";
+        FileUtil fileUtil = new FileUtil();
+        List<Employee> employees = fileUtil.readEmployees(fileName);
+//      print the employees
+        employees.forEach(employee1 -> System.out.println(employee1.getId() + " " + employee1.getFirstName() + " " + employee1.getLastName() + " " + employee1.getEmail()));
     }
 
 
