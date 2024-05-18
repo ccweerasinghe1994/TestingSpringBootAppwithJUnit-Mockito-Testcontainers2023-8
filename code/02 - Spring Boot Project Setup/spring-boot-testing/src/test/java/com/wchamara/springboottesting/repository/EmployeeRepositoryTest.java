@@ -1,6 +1,7 @@
 package com.wchamara.springboottesting.repository;
 
 import com.wchamara.springboottesting.model.Employee;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,16 @@ class EmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository underTest;
 
+    private Employee employee;
+
+    @BeforeEach
+    void setUp() {
+        employee = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("abc@abc.com").build();
+    }
+
     /**
      * This test case is for the Save Employee operation.
      * It uses JUnit's @DisplayName for better readability of test cases.
@@ -41,10 +52,7 @@ class EmployeeRepositoryTest {
     @Test
     void givenEmployeeObject_whenSave_ThenReturnSavedEmployee() {
         // given
-        Employee employee = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
+
         // when
         Employee savedEmployee = underTest.save(employee);
         // then
@@ -68,23 +76,18 @@ class EmployeeRepositoryTest {
     @Test
     void given_whenFindAll_thenReturnListOfEmployees() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-
         Employee employee2 = Employee.builder()
                 .firstName("Gagani")
                 .lastName("Dharika")
                 .email("xds@abc.com").build();
-        underTest.save(employee1);
+        underTest.save(employee);
         underTest.save(employee2);
 
         // when action or the behaviour we are going to test
         List<Employee> employees = underTest.findAll();
         // then verify the output
         assertThat(employees).hasSize(2);
-        assertThat(employees).contains(employee1, employee2);
+        assertThat(employees).contains(employee, employee2);
 
     }
 
@@ -101,18 +104,14 @@ class EmployeeRepositoryTest {
     @DisplayName("JUnit5 test for get Employee by Id operation")
     void givenEmployeeId_whenFindById_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Optional<Employee> userById = underTest.findById(savedEmployee.getId());
         // then verify the output
         assertThat(userById).isPresent();
-        assertThat(userById.get().getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(userById.get().getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(userById.get().getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(userById.get().getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(userById.get().getLastName()).isEqualTo(employee.getLastName());
+        assertThat(userById.get().getEmail()).isEqualTo(employee.getEmail());
 
     }
 
@@ -128,18 +127,14 @@ class EmployeeRepositoryTest {
     @Test
     void givenEmail_whenFindByEmail_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Optional<Employee> byEmail = underTest.findByEmail(savedEmployee.getEmail());
         // then verify the output
         assertThat(byEmail).isPresent();
-        assertThat(byEmail.get().getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(byEmail.get().getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(byEmail.get().getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(byEmail.get().getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(byEmail.get().getLastName()).isEqualTo(employee.getLastName());
+        assertThat(byEmail.get().getEmail()).isEqualTo(employee.getEmail());
     }
 
     /**
@@ -154,11 +149,7 @@ class EmployeeRepositoryTest {
     @DisplayName("JUnit5 test for Delete Employee by Id operation")
     void givenEmployeeId_whenDeleteById_thenEmployeeShouldBeDeleted() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         underTest.deleteById(savedEmployee.getId());
         // then verify the output
@@ -180,10 +171,6 @@ class EmployeeRepositoryTest {
     @Test
     void givenEmployeeObject_whenUpdate_ThenReturnUpdatedEmployee() {
         // given
-        Employee employee = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
         Employee savedEmployee = underTest.save(employee);
         // when
         savedEmployee.setFirstName("Chamara Updated");
@@ -212,19 +199,14 @@ class EmployeeRepositoryTest {
     @Test
     void givenFirstNameAndLastName_whenFindByJPQLQuery_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Employee byJPQLQuery = underTest.findByJPQLQuery(savedEmployee.getFirstName(), savedEmployee.getLastName());
         // then verify the output
         assertThat(byJPQLQuery).isNotNull();
-        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee.getEmail());
     }
 
     /**
@@ -240,19 +222,14 @@ class EmployeeRepositoryTest {
     @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using JPQL query with named parameters")
     void givenFirstNameAndLastName_whenFindByJPQLQueryWithNamedParameters_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("abc@abc.com").build();
-
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Employee byJPQLQuery = underTest.findByJPQLQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
         // then verify the output
         assertThat(byJPQLQuery).isNotNull();
-        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee.getEmail());
 
     }
 
@@ -269,19 +246,14 @@ class EmployeeRepositoryTest {
     @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
     void givenFirstNameAndLastName_whenFindByNativeQuery_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("").build();
-
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Employee byNativeQuery = underTest.findByNativeQueryWithIndexParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
         // then verify the output
         assertThat(byNativeQuery).isNotNull();
-        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee.getEmail());
     }
 
     /**
@@ -297,19 +269,14 @@ class EmployeeRepositoryTest {
     @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
     void givenFirstNameAndLastName_whenFindByNativeQueryWithNamedParameters_thenReturnEmployee() {
         // given - precondition or setup
-        Employee employee1 = Employee.builder()
-                .firstName("Chamara")
-                .lastName("Wijesekara")
-                .email("").build();
-
-        Employee savedEmployee = underTest.save(employee1);
+        Employee savedEmployee = underTest.save(employee);
         // when action or the behaviour we are going to test
         Employee byNativeQuery = underTest.findByNativeQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
         // then verify the output
         assertThat(byNativeQuery).isNotNull();
-        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
-        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
-        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee.getEmail());
     }
 
 }
