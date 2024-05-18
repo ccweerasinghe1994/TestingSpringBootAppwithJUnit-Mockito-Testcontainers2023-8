@@ -238,10 +238,219 @@ class EmployeeRepositoryTest {
 
 ## 009 Unit test Spring Data JPA custom query method using JPQL with index parameters
 
+```java
+package com.wchamara.springboottesting.repository;
+
+import com.wchamara.springboottesting.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    /**
+     * This method is used to find an Employee by their first name and last name using a JPQL query with named parameters.
+     * It takes a first name and a last name as parameters and returns an Employee.
+     * If no Employee is found with the given first name and last name, it will return null.
+     * The named parameters in the JPQL query provide a more readable and error-prone way of setting parameters.
+     *
+     * @param firstName The first name of the Employee to find.
+     * @param lastName  The last name of the Employee to find.
+     * @return The Employee if found, or null if not found.
+     */
+    @Query("SELECT e FROM Employee e WHERE e.firstName =:firstName AND e.lastName =:lastName")
+    Employee findByJPQLQueryWithNamedParameters(@Param("firstName") String firstName, @Param("lastName") String lastName);
+}
+
+```
+
+```java
+
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using JPQL query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByJPQLQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    void givenFirstNameAndLastName_whenFindByJPQLQuery_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("abc@abc.com").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byJPQLQuery = underTest.findByJPQLQuery(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byJPQLQuery).isNotNull();
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+
+```
+
 ## 010 Unit test Spring Data JPA custom query method using JPQL with named parameters
+
+```java
+package com.wchamara.springboottesting.repository;
+
+import com.wchamara.springboottesting.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    /**
+     * This method is used to find an Employee by their first name and last name using a JPQL query with named parameters.
+     * It takes a first name and a last name as parameters and returns an Employee.
+     * If no Employee is found with the given first name and last name, it will return null.
+     * The named parameters in the JPQL query provide a more readable and error-prone way of setting parameters.
+     *
+     * @param firstName The first name of the Employee to find.
+     * @param lastName  The last name of the Employee to find.
+     * @return The Employee if found, or null if not found.
+     */
+    @Query("SELECT e FROM Employee e WHERE e.firstName =:firstName AND e.lastName =:lastName")
+    Employee findByJPQLQueryWithNamedParameters(@Param("firstName") String firstName, @Param("lastName") String lastName);
+}
+
+```
+
+```java
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using JPQL query with named parameters.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByJPQLQueryWithNamedParameters method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using JPQL query with named parameters")
+    void givenFirstNameAndLastName_whenFindByJPQLQueryWithNamedParameters_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("abc@abc.com").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byJPQLQuery = underTest.findByJPQLQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byJPQLQuery).isNotNull();
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+
+    }
+```
 
 ## 011 Unit test Spring Data JPA custom native query with index parameters
 
+```java
+ /**
+     * This method is used to find an Employee by their first name and last name using a native SQL query.
+     * It takes a first name and a last name as parameters and returns an Employee.
+     * If no Employee is found with the given first name and last name, it will return null.
+     * The native SQL query provides a way to write database-specific queries, which can be more efficient in some cases.
+     * The parameters in the query are indexed, starting from 1.
+     *
+     * @param firstName The first name of the Employee to find.
+     * @param lastName  The last name of the Employee to find.
+     * @return The Employee if found, or null if not found.
+     */
+    @Query(value = "SELECT * FROM employees e WHERE e.first_name = ?1 AND e.last_name = ?2", nativeQuery = true)
+    Employee findByNativeQueryWithIndexParameters(String firstName, String lastName);
+```
+
+```java
+/**
+     * This test case is for the Find Employee by First Name and Last Name operation using native query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByNativeQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
+    void givenFirstNameAndLastName_whenFindByNativeQuery_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byNativeQuery = underTest.findByNativeQueryWithIndexParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byNativeQuery).isNotNull();
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+```
+
 ## 012 Unit test Spring Data JPA custom Native query with Named parameters
+
+```java
+/**
+     * This method is used to find an Employee by their first name and last name using a native SQL query with named parameters.
+     * It takes a first name and a last name as parameters and returns an Employee.
+     * If no Employee is found with the given first name and last name, it will return null.
+     * The native SQL query provides a way to write database-specific queries, which can be more efficient in some cases.
+     * The named parameters in the query provide a more readable and error-prone way of setting parameters.
+     *
+     * @param firstName The first name of the Employee to find.
+     * @param lastName  The last name of the Employee to find.
+     * @return The Employee if found, or null if not found.
+     */
+    @Query(value = "SELECT * FROM employees e WHERE e.first_name =:firstName AND e.last_name =:lastName", nativeQuery = true)
+    Employee findByNativeQueryWithNamedParameters(@Param("firstName") String firstName, @Param("lastName") String lastName);
+```
+
+```java
+ /**
+     * This test case is for the Find Employee by First Name and Last Name operation using native query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByNativeQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
+    void givenFirstNameAndLastName_whenFindByNativeQueryWithNamedParameters_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byNativeQuery = underTest.findByNativeQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byNativeQuery).isNotNull();
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+
+```
 
 ## 013 Refactoring JUnit tests to use @BeforeEach annotation

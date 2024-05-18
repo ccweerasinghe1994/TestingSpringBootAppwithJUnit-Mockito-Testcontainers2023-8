@@ -199,4 +199,117 @@ class EmployeeRepositoryTest {
         assertThat(updatedEmployee.getLastName()).isEqualTo(savedEmployee.getLastName());
         assertThat(updatedEmployee.getEmail()).isEqualTo(savedEmployee.getEmail());
     }
+
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using JPQL query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByJPQLQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    void givenFirstNameAndLastName_whenFindByJPQLQuery_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("abc@abc.com").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byJPQLQuery = underTest.findByJPQLQuery(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byJPQLQuery).isNotNull();
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using JPQL query with named parameters.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByJPQLQueryWithNamedParameters method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using JPQL query with named parameters")
+    void givenFirstNameAndLastName_whenFindByJPQLQueryWithNamedParameters_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("abc@abc.com").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byJPQLQuery = underTest.findByJPQLQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byJPQLQuery).isNotNull();
+        assertThat(byJPQLQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byJPQLQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byJPQLQuery.getEmail()).isEqualTo(employee1.getEmail());
+
+    }
+
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using native query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByNativeQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
+    void givenFirstNameAndLastName_whenFindByNativeQuery_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byNativeQuery = underTest.findByNativeQueryWithIndexParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byNativeQuery).isNotNull();
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+
+    /**
+     * This test case is for the Find Employee by First Name and Last Name operation using native query.
+     * It uses JUnit's @Test annotation to indicate that this is a test method.
+     * The test case follows the given-when-then pattern:
+     * - given: An Employee object is created with some initial data and saved using the save method of the EmployeeRepository.
+     * - when: The findByNativeQuery method of the EmployeeRepository is called with the first name and last name of the saved Employee.
+     * - then: Assertions are made to ensure that the returned Employee is not null (indicating the Employee was found successfully),
+     * and the first name, last name, and email of the found Employee are as expected.
+     */
+    @Test
+    @DisplayName("JUnit5 test for Find Employee by First Name and Last Name using native query")
+    void givenFirstNameAndLastName_whenFindByNativeQueryWithNamedParameters_thenReturnEmployee() {
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Chamara")
+                .lastName("Wijesekara")
+                .email("").build();
+
+        Employee savedEmployee = underTest.save(employee1);
+        // when action or the behaviour we are going to test
+        Employee byNativeQuery = underTest.findByNativeQueryWithNamedParameters(savedEmployee.getFirstName(), savedEmployee.getLastName());
+        // then verify the output
+        assertThat(byNativeQuery).isNotNull();
+        assertThat(byNativeQuery.getFirstName()).isEqualTo(employee1.getFirstName());
+        assertThat(byNativeQuery.getLastName()).isEqualTo(employee1.getLastName());
+        assertThat(byNativeQuery.getEmail()).isEqualTo(employee1.getEmail());
+    }
+
 }
