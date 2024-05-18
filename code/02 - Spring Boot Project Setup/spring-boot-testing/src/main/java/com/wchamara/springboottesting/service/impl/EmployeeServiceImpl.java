@@ -4,6 +4,7 @@ import com.wchamara.springboottesting.exception.ResourceNotFoundException;
 import com.wchamara.springboottesting.model.Employee;
 import com.wchamara.springboottesting.repository.EmployeeRepository;
 import com.wchamara.springboottesting.service.EmployeeService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.Optional;
  * This class implements the EmployeeService interface.
  * It provides the business logic for managing Employees.
  */
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     /**
