@@ -137,6 +137,18 @@ public class EmployeeControllerIT {
 
 ## 005 Using @DynamicPropertySource
 
+```java
+    @DynamicPropertySource
+    static void dynamicProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySQLContainer::getUsername);
+        registry.add("spring.datasource.password", mySQLContainer::getPassword);
+    }
+
+```
+
+![alt text](image-5.png)
+
 ## 006 Singleton containers pattern
 
 ## 007 Integration Testing EmployeeRepository using Testcontainers
