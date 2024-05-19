@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class EmployeeRepositoryITest {
+class EmployeeRepositoryITest extends BaseIT {
     // Autowired EmployeeRepository instance
     @Autowired
     private EmployeeRepository underTest;

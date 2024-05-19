@@ -204,3 +204,5 @@ public class EmployeeControllerIT extends BaseIT {
 ```
 
 ## 007 Integration Testing EmployeeRepository using Testcontainers
+
+![alt text](image-6.png)
