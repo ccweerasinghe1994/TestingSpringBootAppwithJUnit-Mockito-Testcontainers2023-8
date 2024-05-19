@@ -7,21 +7,12 @@ import com.wchamara.springboottesting.util.FileUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 
 import java.util.List;
 
@@ -33,17 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@Testcontainers(
-        disabledWithoutDocker = true
-)
-public class EmployeeControllerIT {
-    private static final Logger logger = LoggerFactory.getLogger(EmployeeControllerIT.class);
-    @Container
-    private final static MySQLContainer mySQLContainer = new MySQLContainer<>(DockerImageName.parse("mysql:8.3.0"))
-            .withPassword("example")
-            .withUsername("root")
-            .withDatabaseName("ems")
-            .withLogConsumer(new Slf4jLogConsumer(logger));
+
+public class EmployeeControllerIT extends BaseIT {
+
 
     @Autowired
     EmployeeRepository employeeRepository;
@@ -52,12 +35,6 @@ public class EmployeeControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    @DynamicPropertySource
-    static void dynamicProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mySQLContainer::getUsername);
-        registry.add("spring.datasource.password", mySQLContainer::getPassword);
-    }
 
     @BeforeEach
     void setUp() {
